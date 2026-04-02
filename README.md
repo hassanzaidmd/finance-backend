@@ -8,14 +8,18 @@ A professional, role-based backend system for managing financial records, built 
     ```bash
     npm install
     ```
-2.  **Seed the database** (Creates default admin and 8 sample transactions):
+2.  **Environment Setup**:
+    - Copy `.env.example` to `.env`.
+    - (Optional) Customize the `JWT_SECRET` and `PORT`.
+3.  **Seed the database**:
     ```bash
     npm run seed
     ```
-3.  **Start the server**:
+4.  **Start the server**:
     ```bash
     npm run dev
     ```
+
 
 ---
 
@@ -23,7 +27,17 @@ A professional, role-based backend system for managing financial records, built 
 
 The system uses **JWT (JSON Web Tokens)** for stateless authentication.
 
+### **Required Environment Variables**
+
+Before running the server, copy `.env.example` to a new file named `.env` and configure the following:
+
+- `PORT`: Server port (Default: `3000`).
+- `JWT_SECRET`: Secret key for signing tokens (Use a complex string).
+- `DB_PATH`: Path for the SQLite database file.
+- `ADMIN_INITIAL_PASSWORD`: Initial password for the seeded admin account.
+
 ### **Default Test Credentials**
+
 - **Admin**: `admin` / `admin123` (Full Access)
 - **Analyst**: `analyst` / `analyst123` (Raw Data + Insights)
 - **Viewer**: `viewer` / `viewer123` (Dashboard Only)
