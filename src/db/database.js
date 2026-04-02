@@ -28,9 +28,25 @@ const initDb = () => {
         date TEXT NOT NULL,
         description TEXT,
         userId INTEGER,
+        isDeleted INTEGER DEFAULT 0,
+        deletedAt TEXT,
         createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (userId) REFERENCES users(id)
       )`);
+
+      // 🛡️ AUTO-MIGRATION: Ensure soft-delete columns exist in every instance
+      db.run("ALTER TABLE transactions ADD COLUMN isDeleted INTEGER DEFAULT 0", (err) => {
+        // We ignore "duplicate column name" error
+        if (err && !err.message.includes('duplicate column')) {
+          console.error('Migration isDeleted Error:', err.message);
+        }
+      });
+      
+      db.run("ALTER TABLE transactions ADD COLUMN deletedAt TEXT", (err) => {
+        if (err && !err.message.includes('duplicate column')) {
+          console.error('Migration deletedAt Error:', err.message);
+        }
+      });
 
       // Default Admin User
       const adminUsername = 'admin';

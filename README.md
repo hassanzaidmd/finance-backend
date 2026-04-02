@@ -10,9 +10,19 @@ A live, web-based UI is available for testing all API endpoints directly from yo
 - **Features**: 
     - Test authentication (`/auth/login`) and get a real token.
     - Authorize requests using the "Authorize" button (use the format `Bearer <token>`).
-    - Explore schema definitions and test filtered queries.
+    - Explore schema definitions and test **Pagination** and **Search** queries.
+
+## 🏆 Senior Developer Features
+
+This backend is built for scale and security, including the following advanced capabilities:
+
+- **Pagination & Search**: Efficiently manage thousands of records with `page`, `limit`, and keyword `search` query parameters.
+- **Soft Delete**: A professional "Trash Can" system. Records are hidden via `isDeleted = 1` rather than being permanently destroyed.
+- **Rate Limiting**: Protects against brute-force and DDoS attacks by limiting request volume per IP.
+- **Automated Testing**: Foundation for reliability with `Jest` and `Supertest`.
 
 ## 🚀 Quick Start (Evaluate in 2 Minutes)
+
 
 
 1.  **Install dependencies**:
@@ -26,6 +36,11 @@ A live, web-based UI is available for testing all API endpoints directly from yo
     ```bash
     npm run seed
     ```
+5.  **Run Tests**:
+    ```bash
+    npm test
+    ```
+
 4.  **Start the server**:
     ```bash
     npm run dev
@@ -58,10 +73,13 @@ Before running the server, copy `.env.example` to a new file named `.env` and co
 | Feature | ADMIN | ANALYST | VIEWER |
 | :--- | :---: | :---: | :---: |
 | Register New Users | ✅ | ❌ | ❌ |
+| Manage Existing Users (List/Update/Delete) | ✅ | ❌ | ❌ |
+| Deactivate Accounts (Block access) | ✅ | ❌ | ❌ |
 | Create/Update/Delete Records | ✅ | ❌ | ❌ |
 | View Raw Financial Records | ✅ | ✅ | ❌ |
 | Access Dashboard Summaries | ✅ | ✅ | ✅ |
 | Access Trends & Analytics | ✅ | ✅ | ✅ |
+
 
 
 ---
@@ -82,6 +100,12 @@ Before running the server, copy `.env.example` to a new file named `.env` and co
 - `GET /dashboard/summary`: Net balance, total income, and total expenses.
 - `GET /dashboard/categories`: Aggregated totals grouped by category.
 - `GET /dashboard/trends`: Monthly income vs. expense performance.
+
+### **User Management Endpoints** (Admin Only)
+- `GET /users`: List and monitor all registered accounts.
+- `PATCH /users/:id`: Promote users or deactivate accounts to block access.
+- `DELETE /users/:id`: Permanently remove account data.
+
 
 ---
 

@@ -27,18 +27,24 @@ const createTransaction = (req, res) => {
 };
 
 const getTransactions = (req, res) => {
-  const { type, category, startDate, endDate } = req.query;
-  let query = 'SELECT * FROM transactions WHERE 1=1';
+  // Advanced Features: Filtering, Search, and Pagination
+  const { type, category, startDate, endDate, search, page = 1, limit = 10 } = req.query;
+  
+  const offset = (page - 1) * limit;
+  let query = 'SELECT * FROM transactions WHERE isDeleted = 0';
   const params = [];
 
+  // Filter by Type
   if (type) {
     query += ' AND type = ?';
     params.push(type.toUpperCase());
   }
+  // Filter by Category
   if (category) {
     query += ' AND category = ?';
     params.push(category);
   }
+  // Filter by Date Range
   if (startDate) {
     query += ' AND date >= ?';
     params.push(startDate);
@@ -47,15 +53,35 @@ const getTransactions = (req, res) => {
     query += ' AND date <= ?';
     params.push(endDate);
   }
+  // Keyword Search (Description or Category)
+  if (search) {
+    query += ' AND (description LIKE ? OR category LIKE ?)';
+    const searchParam = `%${search}%`;
+    params.push(searchParam, searchParam);
+  }
 
-  query += ' ORDER BY date DESC';
+  // Sorting and Pagination
+  query += ' ORDER BY date DESC LIMIT ? OFFSET ?';
+  params.push(parseInt(limit), parseInt(offset));
 
   db.all(query, params, (err, rows) => {
     if (err) {
       console.error('Database Get Transactions Error:', err);
       return res.status(500).json({ error: 'Database error' });
     }
-    res.json(rows);
+    
+    // Get total count for pagination metadata
+    db.get('SELECT COUNT(*) as total FROM transactions WHERE isDeleted = 0', [], (err, result) => {
+      res.json({
+        data: rows,
+        pagination: {
+          total: result ? result.total : 0,
+          page: parseInt(page),
+          limit: parseInt(limit),
+          totalPages: result ? Math.ceil(result.total / limit) : 0
+        }
+      });
+    });
   });
 };
 
@@ -72,14 +98,14 @@ const updateTransaction = (req, res) => {
   const { amount, type, category, date, description } = result.data;
 
   db.run(
-    'UPDATE transactions SET amount = ?, type = ?, category = ?, date = ?, description = ? WHERE id = ?',
+    'UPDATE transactions SET amount = ?, type = ?, category = ?, date = ?, description = ? WHERE id = ? AND isDeleted = 0',
     [amount, type, category, date, description, id],
     function (err) {
       if (err) {
         console.error('Database Update Transaction Error:', err);
         return res.status(500).json({ error: 'Database error' });
       }
-      if (this.changes === 0) return res.status(404).json({ error: 'Transaction not found' });
+      if (this.changes === 0) return res.status(404).json({ error: 'Transaction not found or deleted' });
       res.json({ id, ...result.data });
     }
   );
@@ -87,15 +113,21 @@ const updateTransaction = (req, res) => {
 
 const deleteTransaction = (req, res) => {
   const { id } = req.params;
+  const deletedAt = new Date().toISOString();
 
-  db.run('DELETE FROM transactions WHERE id = ?', [id], function (err) {
-    if (err) {
-      console.error('Database Delete Transaction Error:', err);
-      return res.status(500).json({ error: 'Database error' });
+  // Professional Soft Delete Implementation
+  db.run(
+    'UPDATE transactions SET isDeleted = 1, deletedAt = ? WHERE id = ?',
+    [deletedAt, id],
+    function (err) {
+      if (err) {
+        console.error('Database Soft Delete Error:', err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      if (this.changes === 0) return res.status(404).json({ error: 'Transaction not found' });
+      res.json({ message: 'Transaction moved to trash (soft deleted)', id, deletedAt });
     }
-    if (this.changes === 0) return res.status(404).json({ error: 'Transaction not found' });
-    res.json({ message: 'Transaction deleted successfully' });
-  });
+  );
 };
 
 module.exports = {

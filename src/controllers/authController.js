@@ -24,7 +24,16 @@ const login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
 
+    // Check account status
+    if (user.status === 'INACTIVE') {
+      return res.status(403).json({ 
+        error: 'Forbidden', 
+        message: 'Your account has been deactivated. Please contact the administrator for support.' 
+      });
+    }
+
     const token = jwt.sign(
+
       { id: user.id, username: user.username, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }

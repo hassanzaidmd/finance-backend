@@ -26,13 +26,25 @@ const options = {
         Transaction: {
           type: 'object',
           properties: {
-            id: { type: 'integer' },
+            id: { type: 'integer', description: 'Auto-generated unique ID' },
             amount: { type: 'number' },
             type: { type: 'string', enum: ['INCOME', 'EXPENSE'] },
             category: { type: 'string' },
             date: { type: 'string', format: 'date' },
             description: { type: 'string' },
-            userId: { type: 'integer' },
+            userId: { type: 'integer', description: 'ID of the Admin who created this record' },
+            createdAt: { type: 'string', format: 'date-time' }
+          },
+        },
+        TransactionInput: {
+          type: 'object',
+          required: ['amount', 'type', 'category', 'date'],
+          properties: {
+            amount: { type: 'number', example: 125.50 },
+            type: { type: 'string', enum: ['INCOME', 'EXPENSE'], example: 'EXPENSE' },
+            category: { type: 'string', example: 'Utilities' },
+            date: { type: 'string', format: 'date', example: '2026-04-02' },
+            description: { type: 'string', example: 'Monthly electric bill' },
           },
         },
         AuthResponse: {
@@ -52,7 +64,7 @@ const options = {
       },
     },
   },
-  apis: ['./src/routes/*.js'], // Path to the API docs
+  apis: ['./src/routes/*.js'],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
