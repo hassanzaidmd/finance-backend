@@ -61,7 +61,7 @@ The system enforces strict access control based on user roles:
 
 ---
 
-## 🏆 Senior Developer Feature Set
+## 🏆 Optional Enhancement Feature Set
 
 - **Pagination & Search**: Efficiently manage thousands of records with `page`, `limit`, and keyword `search`.
 - **Soft Delete**: A professional "Trash Can" system where records are hidden via `isDeleted = 1` rather than being permanently destroyed.
