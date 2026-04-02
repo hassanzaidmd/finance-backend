@@ -3,7 +3,9 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-const dbPath = path.resolve(__dirname, '../../finance.db');
+const dbPath = process.env.DB_PATH 
+  ? path.resolve(process.cwd(), process.env.DB_PATH) 
+  : path.resolve(__dirname, '../../finance.db');
 const db = new sqlite3.Database(dbPath);
 
 const initDb = () => {
