@@ -10,6 +10,10 @@ const options = {
     },
     servers: [
       {
+        url: process.env.RENDER_EXTERNAL_URL || 'http://localhost:3000',
+        description: 'Production Server (Render)',
+      },
+      {
         url: 'http://localhost:3000',
         description: 'Local Development Server',
       },

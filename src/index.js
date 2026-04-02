@@ -59,6 +59,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'UP', message: 'Finance Backend is running smoothly.' });
+});
+
 app.get('/', (req, res) => {
 
   res.json({ message: 'Welcome to Finance Management API' });
