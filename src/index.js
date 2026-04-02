@@ -5,6 +5,9 @@ const { initDb } = require('./db/database');
 const authRoutes = require('./routes/authRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
+
 
 
 
@@ -22,6 +25,10 @@ app.use(morgan('dev'));
 app.use('/auth', authRoutes);
 app.use('/transactions', transactionRoutes);
 app.use('/dashboard', dashboardRoutes);
+
+// Swagger Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 
 

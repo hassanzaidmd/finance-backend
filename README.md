@@ -2,7 +2,18 @@
 
 A professional, role-based backend system for managing financial records, built with Node.js, Express, and SQLite. This system features robust authentication (JWT), flexible role-based permissions (RBAC), and aggregated dashboard analytics.
 
+## 🕹️ Interactive API Playground (Swagger)
+
+A live, web-based UI is available for testing all API endpoints directly from your browser. 
+
+- **URL**: `http://localhost:3000/api-docs`
+- **Features**: 
+    - Test authentication (`/auth/login`) and get a real token.
+    - Authorize requests using the "Authorize" button (use the format `Bearer <token>`).
+    - Explore schema definitions and test filtered queries.
+
 ## 🚀 Quick Start (Evaluate in 2 Minutes)
+
 
 1.  **Install dependencies**:
     ```bash
