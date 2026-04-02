@@ -1,6 +1,17 @@
 # 🏛️ Secure Finance Management Backend
 
+> [!IMPORTANT]
+> **🚀 Live Demonstration**: [https://finance-backend-xber.onrender.com/api-docs/](https://finance-backend-xber.onrender.com/api-docs/)  
+> *Check this link first to interact with the API via Swagger UI!*
+
 A professional, role-based backend system for managing financial records, built with **Node.js**, **Express**, and **SQLite**. This system features robust authentication (JWT), flexible role-based permissions (RBAC), and aggregated dashboard analytics.
+
+---
+
+## 📚 Technical Deep Dive
+For a detailed explanation of the architecture, design patterns (Controller-Service-Route), and security layers, please see the [INTERNAL_DOCUMENTATION.md](./INTERNAL_DOCUMENTATION.md).
+
+---
 
 ---
 
