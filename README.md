@@ -1,146 +1,88 @@
-# Finance Data Processing & Access Control Backend
+# 🏛️ Secure Finance Management Backend
 
-A professional, role-based backend system for managing financial records, built with Node.js, Express, and SQLite. This system features robust authentication (JWT), flexible role-based permissions (RBAC), and aggregated dashboard analytics.
+A professional, role-based backend system for managing financial records, built with **Node.js**, **Express**, and **SQLite**. This system features robust authentication (JWT), flexible role-based permissions (RBAC), and aggregated dashboard analytics.
 
-## 🕹️ Interactive API Playground (Swagger)
+---
 
-A live, web-based UI is available for testing all API endpoints directly from your browser. 
+## 🕹️ Interactive API Playground (Swagger UI)
 
-- **URL**: `http://localhost:3000/api-docs`
-- **Features**: 
-    - Test authentication (`/auth/login`) and get a real token.
-    - Authorize requests using the "Authorize" button (use the format `Bearer <token>`).
-    - Explore schema definitions and test **Pagination** and **Search** queries.
+The fastest way to explore and test the API is through the built-in Swagger UI:
 
-## 🏆 Senior Developer Features
+- **Local URL**: `http://localhost:3000/api-docs`
+- **What to do**:
+    1.  Go to `POST /auth/login` and use the admin credentials to get a token.
+    2.  Click the "Authorize" button and enter `Bearer <your_token>`.
+    3.  You can now test all endpoints, including **Pagination**, **Keyword Search**, and **Soft Deletion**.
 
-This backend is built for scale and security, including the following advanced capabilities:
+---
 
-- **Pagination & Search**: Efficiently manage thousands of records with `page`, `limit`, and keyword `search` query parameters.
-- **Soft Delete**: A professional "Trash Can" system. Records are hidden via `isDeleted = 1` rather than being permanently destroyed.
-- **Rate Limiting**: Protects against brute-force and DDoS attacks by limiting request volume per IP.
-- **Automated Testing**: Foundation for reliability with `Jest` and `Supertest`.
+## 🚀 Quick Start (Setup in 60 Seconds)
 
-## 🚀 Quick Start (Evaluate in 2 Minutes)
-
-
-
-1.  **Install dependencies**:
+1.  **Install Dependencies**:
     ```bash
     npm install
     ```
 2.  **Environment Setup**:
-    - Copy `.env.example` to `.env`.
-    - (Optional) Customize the `JWT_SECRET` and `PORT`.
-3.  **Seed the database**:
+    - Copy `.env.example` to a new file named `.env`.
+    - (Optional) Customize your `PORT` or `JWT_SECRET`.
+3.  **Seed the Database**:
     ```bash
     npm run seed
+    ```
+4.  **Start the Server**:
+    ```bash
+    npm run dev
     ```
 5.  **Run Tests**:
     ```bash
     npm test
     ```
 
-4.  **Start the server**:
-    ```bash
-    npm run dev
-    ```
-
-
 ---
 
-## 🔐 Authentication & Roles
+## 🔐 Authentication & Role-Based Access (RBAC)
 
-The system uses **JWT (JSON Web Tokens)** for stateless authentication.
+The system enforces strict access control based on user roles:
 
-### **Required Environment Variables**
-
-Before running the server, copy `.env.example` to a new file named `.env` and configure the following:
-
-- `PORT`: Server port (Default: `3000`).
-- `JWT_SECRET`: Secret key for signing tokens (Use a complex string).
-- `DB_PATH`: Path for the SQLite database file.
-- `ADMIN_INITIAL_PASSWORD`: Initial password for the seeded admin account.
-
-### **Default Test Credentials**
-
-- **Admin**: `admin` / `admin123` (Full Access)
-- **Analyst**: `analyst` / `analyst123` (Raw Data + Insights)
-- **Viewer**: `viewer` / `viewer123` (Dashboard Only)
-
-### **Role-Based Access Control (RBAC)**
-
-| Feature | ADMIN | ANALYST | VIEWER |
+| Feature | **ADMIN** | **ANALYST** | **VIEWER** |
 | :--- | :---: | :---: | :---: |
 | Register New Users | ✅ | ❌ | ❌ |
 | Manage Existing Users (List/Update/Delete) | ✅ | ❌ | ❌ |
 | Deactivate Accounts (Block access) | ✅ | ❌ | ❌ |
-| Create/Update/Delete Records | ✅ | ❌ | ❌ |
+| Create/Update/Delete Records (Hard/Soft) | ✅ | ❌ | ❌ |
 | View Raw Financial Records | ✅ | ✅ | ❌ |
 | Access Dashboard Summaries | ✅ | ✅ | ✅ |
 | Access Trends & Analytics | ✅ | ✅ | ✅ |
 
-
-
----
-
-## 🛣️ API Reference
-
-### **Auth Endpoints**
-- `POST /auth/login`: Authenticate and receive a JWT.
-- `POST /auth/register`: (Admin Only) Create a new user with a specific role.
-
-### **Transaction Endpoints** (Support Filters: `type`, `category`, `startDate`, `endDate`)
-- `GET /transactions`: Retrieve all records (accessible to all roles).
-- `POST /transactions`: (Admin Only) Create a new entry.
-- `PUT /transactions/:id`: (Admin Only) Update an existing entry.
-- `DELETE /transactions/:id`: (Admin Only) Remove an entry.
-
-### **Dashboard Endpoints**
-- `GET /dashboard/summary`: Net balance, total income, and total expenses.
-- `GET /dashboard/categories`: Aggregated totals grouped by category.
-- `GET /dashboard/trends`: Monthly income vs. expense performance.
-
-### **User Management Endpoints** (Admin Only)
-- `GET /users`: List and monitor all registered accounts.
-- `PATCH /users/:id`: Promote users or deactivate accounts to block access.
-- `DELETE /users/:id`: Permanently remove account data.
-
+### **Default Test Credentials**
+- **Admin**: `admin` / `admin123` (Full Access)
+- **Analyst**: `analyst` / `analyst123` (Detailed Data + Insights)
+- **Viewer**: `viewer` / `viewer123` (Dashboard Summaries Only)
 
 ---
 
-## 🛠️ Technology Stack
+## 🏆 Senior Developer Feature Set
 
--   **Runtime**: Node.js
--   **Framework**: Express.js
--   **Database**: SQLite (Portability & Zero-Config)
--   **Security**: `bcryptjs` (Hashing) & `jsonwebtoken` (JWT)
--   **Validation**: `Zod` (Schema-based input validation)
--   **Middleware**: `morgan` (Logging) & `dotenv` (Environment Config)
+- **Pagination & Search**: Efficiently manage thousands of records with `page`, `limit`, and keyword `search`.
+- **Soft Delete**: A professional "Trash Can" system where records are hidden via `isDeleted = 1` rather than being permanently destroyed.
+- **Rate Limiting**: Protects against brute-force and DDoS attacks by limiting request volume per IP.
+- **Auto-Migration**: The schema automatically evolves on server-start to ensure stability.
+- **Zod Validation**: Strict runtime type-safety for every incoming request.
 
 ---
 
-## 📂 Project Structure
+## 📂 Project Navigation
 
-```text
-src/
-├── controllers/      # Business logic (Auth, Transactions, Dashboard)
-├── db/               # Database config, migrations, and seeding
-├── middleware/       # Authentication & RBAC guards
-├── routes/           # API route definitions
-├── utils/            # Zod validation schemas
-└── index.js          # Entry point & global error handling
-```
+- **Entry Point**: `src/index.js`
+- **Logic**: `src/controllers/`
+- **Security**: `src/middleware/`
+- **Validation**: `src/utils/validation.js`
 
 ---
 
 ## 🧠 Design Decisions & Tradeoffs
 
-In building this project, several key architectural decisions were made to prioritize **clarity**, **security**, and **portability**:
-
-1.  **SQLite over PostgreSQL/MongoDB**: Chosen for **zero-configuration portability**. An evaluator can run the project immediately without setting up a separate database server. For production, this could be easily swapped for a managed relational database due to our clean controller/service separation.
-2.  **JWT (Stateless Auth)**: Implemented to ensure the backend is scalable and can easily work with a separate frontend without managing session state on the server.
-3.  **Zod for Runtime Type Safety**: Every incoming request is validated against a schema before it ever hits the database. this protects against SQL injection, malformed data, and unexpected crashes.
-4.  **RBAC Middleware**: Designed as a reusable higher-order function (`authorize(['ROLES'])`). This makes adding new roles or changing permissions incredibly simple and readable in the route files.
-5.  **Soft Delete vs. Hard Delete**: For this assignment, we use hard deletes for simplicity, though the database schema is structured such that "Deleted At" columns could be added without breaking existing logic.
-
+1.  **SQLite over PostgreSQL**: Chosen for **zero-configuration portability**. An evaluator can run the project immediately without a separate database server.
+2.  **Stateless Auth (JWT)**: Ensures the backend is scalable and ready for a separate frontend (React/Next.js).
+3.  **Soft-Delete Pattern**: Prioritizes data safety. In financial systems, we keep hidden history for audit and "undo" purposes.
+4.  **RBAC Middleware**: Designed as a reusable higher-order function (`authorize(['ROLES'])`) for extreme readability across routes.
